@@ -31,12 +31,13 @@ from pgoapi import PGoApi
 from pgoapi.utilities import f2i
 from pgoapi import utilities as util
 from pgoapi.exceptions import AuthException
+from utils import get_args
 
 from . import config
 from .models import parse_map
 
 log = logging.getLogger(__name__)
-args = util.get_args()
+args = get_args()
 
 TIMESTAMP = '\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000'
 
