@@ -36,6 +36,7 @@ from . import config
 from .models import parse_map
 
 log = logging.getLogger(__name__)
+args = util.get_args()
 
 TIMESTAMP = '\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000'
 
@@ -284,7 +285,7 @@ def map_request(api, position):
                             since_timestamp_ms=timestamps,
                             cell_id=cell_ids)
     except Exception as e:
-        log.warning('Exception while downloading map: %s', e)
+        log.warning('[%s] Exception while downloading map: %s', args.username, e)
         return False
 
 class TooManyLoginAttempts(Exception):
