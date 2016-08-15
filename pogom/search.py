@@ -30,8 +30,10 @@ from pgoapi import utilities as util
 from pgoapi.exceptions import AuthException
 
 from .models import parse_map
+from .utils import get_args
 
 log = logging.getLogger(__name__)
+prog_args = get_args()
 
 TIMESTAMP = '\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000'
 
@@ -236,7 +238,7 @@ def search_worker_thread(args, account, search_items_queue, parse_lock, encrypti
 
                     # G'damnit, nothing back. Mark it up, sleep, carry on
                     if not response_dict:
-                        log.error('Search step %d area download failed, retrying request in %g seconds', step, sleep_time)
+                        log.error('[%s] Search step %d area download failed, retrying request in %g seconds',  prog_args.username, step, sleep_time)
                         failed_total += 1
                         time.sleep(sleep_time)
                         continue
@@ -249,7 +251,7 @@ def search_worker_thread(args, account, search_items_queue, parse_lock, encrypti
                             search_items_queue.task_done()
                             break  # All done, get out of the request-retry loop
                         except KeyError:
-                            log.exception('Search step %s map parsing failed, retrying request in %g seconds. Username: %s', step, sleep_time, account['username'])
+                            log.exception('[%s] Search step %s map parsing failed, retrying request in %g seconds. Username: %s',  prog_args.username, step, sleep_time, account['username'])
                             failed_total += 1
                             time.sleep(sleep_time)
 
@@ -302,7 +304,7 @@ def map_request(api, position):
                                    since_timestamp_ms=timestamps,
                                    cell_id=cell_ids)
     except Exception as e:
-        log.warning('Exception while downloading map: %s', e)
+        log.warning('[%s] Exception while downloading map: %s',  prog_args.username, e)
         return False
 
 

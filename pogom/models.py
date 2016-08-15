@@ -394,6 +394,7 @@ def parse_map(map_dict, step_location):
             break
         except Exception as e:
             log.warning('%s... Retrying', e)
+            flaskDb.close_db(None)
 
     if pokemons and config['parse_pokemon']:
         pokemons_upserted = len(pokemons)
@@ -413,7 +414,8 @@ def parse_map(map_dict, step_location):
 
     flaskDb.close_db(None)
 
-    log.info('Upserted %d pokemon, %d pokestops, and %d gyms',
+    log.info('[%s]Upserted %d pokemon, %d pokestops, and %d gyms',
+             args.username,
              pokemons_upserted,
              pokestops_upserted,
              gyms_upserted)
